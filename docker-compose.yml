@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # MySQL 服务
+  mysql:
+    working_dir: /app
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: prod_fs_user_pssd_Abc_123_no_use
+      MYSQL_DATABASE: prod_fs
+      MYSQL_USER: prod_fs_user
+      MYSQL_PASSWORD: prod_fs_user_pssd_Abc_123
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+  # Redis 服务
+  redis:
+    working_dir: /app
+    image: redis:7.2.4
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    privileged: true
+
+  # NestJS 应用程序服务
+  nestjs:
+    working_dir: /app
+    image: node:lts
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - ./:/app
+    ports:
+      - 3000:3000
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: prod_fs_user
+      MYSQL_PASSWORD: prod_fs_user_pssd_Abc_123
+      MYSQL_DATABASE: prod_fs
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_URL: mysql://prod_fs_user:prod_fs_user_pssd_Abc_123@mysql:3306/prod_fs
+    # 如果你的 NestJS 项目有需要执行数据库迁移的脚本，你可以在这里添加命令
+    command: sh -c "npm install && npx prisma generate && npx prisma migrate deploy && npm run build && npm run start:prod"
