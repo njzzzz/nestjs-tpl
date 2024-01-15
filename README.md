@@ -5,7 +5,7 @@
   * [X]  login
   * [X]  logout
 * [X]  logger
-* [ ]  swagger
+* [X]  swagger
 * [X]  validator
 * [X]  throttler
 * [X]  redis
