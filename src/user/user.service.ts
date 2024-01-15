@@ -23,7 +23,7 @@ export class UserService {
   async login(data: LoginUserDto): Promise<User> {
     return await this.usersRepository.findOneBy(data);
   }
-  // 事务，创建多个用户
+  // 【仅示例】事务，创建多个用户
   async createMany(users: User[]) {
     const queryRunner = this.dataSource.createQueryRunner();
 
