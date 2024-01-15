@@ -1,5 +1,6 @@
 * [X]  auth jwt
-* [X]  prisma
+* [X]  typeorm
+* [X]  @nestjs/typeorm
 * [X]  user
   * [X]  register
   * [X]  login

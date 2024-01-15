@@ -3,19 +3,19 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { PrismaModule } from './prisma/prisma.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { redisStore } from 'cache-manager-redis-store';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from './response/response.interceptor';
 import { WinstonModule } from 'nest-winston';
 import { transports, format } from 'winston';
 import 'winston-daily-rotate-file';
 import CommonExceptionFilter from './exception/commonException.filter';
 import LoggerMiddleware from './logger/logger.middleware';
-console.log('process.env', process.env.REDIS_HOST);
+console.log('process.env', process.env.REDIS_HOST, process.env.NODE_ENV);
 
 @Module({
   imports: [
@@ -72,12 +72,28 @@ console.log('process.env', process.env.REDIS_HOST);
       url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
       password: process.env.REDIS_PASSWORD,
     }),
+    // mysql
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'mysql',
+          host: configService.get('DB_HOST'),
+          port: +configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          autoLoadEntities: true,
+          // 不要在生产环境使用
+          synchronize: true,
+        };
+      },
+    }),
     // 授权模块
     AuthModule,
     // 用户模块
     UserModule,
-    // prisma连接
-    PrismaModule,
   ],
   controllers: [AppController],
   providers: [
