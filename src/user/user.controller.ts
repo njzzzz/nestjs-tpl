@@ -68,11 +68,11 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiOperation({ summary: '用户退出' })
-  @Post('/logout')
-  @UseGuards(JwtGuard)
   @ApiResponse({
     type: Boolean,
   })
+  @UseGuards(JwtGuard)
+  @Post('/logout')
   async logout(@Request() req) {
     // 从req上获取用户信息
     const user = req.user as JwtPayload;
@@ -82,11 +82,11 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiOperation({ summary: '获取用户信息' })
-  @Get('/info')
-  @UseGuards(JwtGuard)
   @ApiResponse({
     type: infoUserDto,
   })
+  @UseGuards(JwtGuard)
+  @Get('/info')
   async info(@Request() req): Promise<infoUserDto> {
     // 从req上获取用户信息
     const user = req.user as JwtPayload;
