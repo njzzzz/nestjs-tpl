@@ -1,12 +1,12 @@
-* [ ]  auth jwt
-* [ ]  prisma
-* [ ]  user
-  * [ ]  register
-  * [ ]  login
-  * [ ]  logout
-* [ ]  logger
+* [X]  auth jwt
+* [X]  prisma
+* [X]  user
+  * [X]  register
+  * [X]  login
+  * [X]  logout
+* [X]  logger
 * [ ]  swagger
-* [ ]  validator
-* [ ]  throttler
-* [ ]  redis
-* [ ]  logger
+* [X]  validator
+* [X]  throttler
+* [X]  redis
+* [X]  logger

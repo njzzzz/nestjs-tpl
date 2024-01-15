@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -14,6 +14,7 @@ import { WinstonModule } from 'nest-winston';
 import { transports, format } from 'winston';
 import 'winston-daily-rotate-file';
 import CommonExceptionFilter from './exception/commonException.filter';
+import LoggerMiddleware from './logger/logger.middleware';
 console.log('process.env', process.env.REDIS_HOST);
 
 @Module({
@@ -98,4 +99,8 @@ console.log('process.env', process.env.REDIS_HOST);
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

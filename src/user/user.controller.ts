@@ -16,7 +16,16 @@ import { Cache } from 'cache-manager';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { JwtGuard } from '../guards/jwt/jwt.guard';
 import { JwtPayload } from '../auth/jwtPayload.interface';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { infoUserDto } from './dto/infoUser.dto';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(
@@ -25,12 +34,22 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
+  @ApiOperation({ summary: '用户注册' })
+  @ApiBody({
+    description: '用户注册',
+    type: CreateUserDto,
+  })
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto) {
     await this.useService.createUser(createUserDto);
     return true;
   }
 
+  @ApiOperation({ summary: '用户登陆' })
+  @ApiBody({
+    description: '用户登陆',
+    type: LoginUserDto,
+  })
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
     const user = await this.useService.login(loginUserDto);
@@ -47,8 +66,13 @@ export class UserController {
     };
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '用户退出' })
   @Post('/logout')
   @UseGuards(JwtGuard)
+  @ApiResponse({
+    type: Boolean,
+  })
   async logout(@Request() req) {
     // 从req上获取用户信息
     const user = req.user as JwtPayload;
@@ -56,9 +80,14 @@ export class UserController {
     return true;
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '获取用户信息' })
   @Get('/info')
   @UseGuards(JwtGuard)
-  async info(@Request() req) {
+  @ApiResponse({
+    type: infoUserDto,
+  })
+  async info(@Request() req): Promise<infoUserDto> {
     // 从req上获取用户信息
     const user = req.user as JwtPayload;
     return {

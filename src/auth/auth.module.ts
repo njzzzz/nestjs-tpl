@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
     JwtModule.register({
       global: true,
       secret: 'your-secret-key', // 用于签名的密钥，你应该更改为实际使用的密钥
-      signOptions: { expiresIn: '3600s' }, // token 过期时间
+      signOptions: { expiresIn: '1d' }, // token 过期时间
     }),
   ],
   providers: [AuthService, JwtStrategy],
