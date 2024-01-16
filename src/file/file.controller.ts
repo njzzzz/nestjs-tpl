@@ -6,7 +6,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -18,6 +24,7 @@ import { JwtGuard } from '../guards/jwt/jwt.guard';
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: '文件上传' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
