@@ -18,6 +18,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { randomUUID } from 'crypto';
 import { JwtGuard } from '../guards/jwt/jwt.guard';
+import { UploadFileDto } from './dto/upload-file.dto';
 
 @ApiTags('File')
 @Controller('file')
@@ -53,7 +54,7 @@ export class FileController {
       }),
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadFile(@UploadedFile() file: Express.Multer.File): UploadFileDto {
     return {
       url: '/public/upload/' + file.filename,
     };
