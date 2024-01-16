@@ -15,10 +15,17 @@ import { transports, format } from 'winston';
 import 'winston-daily-rotate-file';
 import CommonExceptionFilter from './exception/commonException.filter';
 import LoggerMiddleware from './logger/logger.middleware';
-console.log('process.env', process.env.REDIS_HOST);
+import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { FileModule } from './file/file.module';
+import { join } from 'path';
 
 @Module({
   imports: [
+    // 静态资源，直接通过 http://host:port/upload/xxxxx.pdf访问
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     // 配置文件
     ConfigModule.forRoot(),
     // 日志
@@ -72,12 +79,16 @@ console.log('process.env', process.env.REDIS_HOST);
       url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
       password: process.env.REDIS_PASSWORD,
     }),
+    // 文件上传
+    MulterModule.register(),
     // 授权模块
     AuthModule,
     // 用户模块
     UserModule,
     // prisma连接
     PrismaModule,
+    // 文件模块
+    FileModule,
   ],
   controllers: [AppController],
   providers: [
