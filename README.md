@@ -17,6 +17,10 @@ you should install blow deps before you start
 - redis
 
 For Macos, you can use brew to install
+```bash
+brew install mysql@5.7
+brew install redis
+```
 
 ## Starter
 ```bash
