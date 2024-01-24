@@ -11,3 +11,16 @@
 * [X]  throttler
 * [X]  redis
 * [X]  logger
+## Before Start
+you should install blow deps before you start
+- mysql
+- redis
+
+For Macos, you can use brew to install
+
+## Starter
+```bash
+pnpm install
+pnpm dev
+```
+
