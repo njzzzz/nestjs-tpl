@@ -1,16 +1,16 @@
-import { Request } from 'express';
+import { Request } from 'express'
 
 export const getReqMainInfo: (req: Request) => {
-  [prop: string]: any;
+  [prop: string]: any
 } = (req) => {
-  const { query, headers, url, method, body, connection, originalUrl } = req;
+  const { query, headers, url, method, body, connection, originalUrl } = req
 
   // 获取 IP
-  const xRealIp = headers['X-Real-IP'];
-  const xForwardedFor = headers['X-Forwarded-For'];
-  const { ip: cIp } = req;
-  const { remoteAddress } = connection || {};
-  const ip = xRealIp || xForwardedFor || cIp || remoteAddress;
+  const xRealIp = headers['X-Real-IP']
+  const xForwardedFor = headers['X-Forwarded-For']
+  const { ip: cIp } = req
+  const { remoteAddress } = connection || {}
+  const ip = xRealIp || xForwardedFor || cIp || remoteAddress
 
   return {
     url,
@@ -20,5 +20,5 @@ export const getReqMainInfo: (req: Request) => {
     method,
     query,
     body,
-  };
-};
+  }
+}

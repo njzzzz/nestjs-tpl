@@ -1,9 +1,9 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { AppService } from './app.service';
-import { AuthService } from './auth/auth.service';
-import { UserService } from './user/user.service';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import { ApiTags } from '@nestjs/swagger'
+import { AppService } from './app.service'
+import { AuthService } from './auth/auth.service'
+import { UserService } from './user/user.service'
 
 @ApiTags('Example')
 @Controller()
@@ -17,12 +17,12 @@ export class AppController {
   @Post('/a')
   @UseGuards(AuthGuard('jwt'))
   getHello(): string {
-    return this.appService.getHello();
+    return this.appService.getHello()
   }
 
   @Get('/get/token')
   getToken() {
-    return this.authService.createToken('admin', 1);
+    return this.authService.createToken('admin', 1)
   }
 
   @Post('/user/create')
@@ -30,6 +30,6 @@ export class AppController {
     return this.userService.createUser({
       username: 'xxx',
       password: 'xxx',
-    });
+    })
   }
 }

@@ -1,23 +1,23 @@
-import {
-  Controller,
-  Post,
-  UseInterceptors,
-  UploadedFile,
-  UseGuards,
-} from '@nestjs/common';
-import { FileService } from './file.service';
+import { extname } from 'node:path'
+import { randomUUID } from 'node:crypto'
 import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiOperation,
   ApiTags,
-} from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import { randomUUID } from 'crypto';
-import { JwtGuard } from '../guards/jwt/jwt.guard';
+} from '@nestjs/swagger'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { diskStorage } from 'multer'
+import {
+  Controller,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
+import { JwtGuard } from '../guards/jwt/jwt.guard'
+import { FileService } from './file.service'
 
 @ApiTags('File')
 @Controller('file')
@@ -47,15 +47,15 @@ export class FileController {
       storage: diskStorage({
         destination: './public/upload/',
         filename: (req, file, callback) => {
-          const ext = extname(file.originalname);
-          callback(null, randomUUID() + ext);
+          const ext = extname(file.originalname)
+          callback(null, randomUUID() + ext)
         },
       }),
     }),
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return {
-      url: '/public/upload/' + file.filename,
-    };
+      url: `/public/upload/${file.filename}`,
+    }
   }
 }

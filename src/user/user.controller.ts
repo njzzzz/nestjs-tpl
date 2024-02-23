@@ -7,23 +7,23 @@ import {
   Request,
   UnauthorizedException,
   UseGuards,
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/createUser.dto';
-import { AuthService } from '../auth/auth.service';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { LoginUserDto } from './dto/loginUser.dto';
-import { JwtGuard } from '../guards/jwt/jwt.guard';
-import { JwtPayload } from '../auth/jwtPayload.interface';
+} from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Cache } from 'cache-manager'
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
-} from '@nestjs/swagger';
-import { infoUserDto } from './dto/infoUser.dto';
+} from '@nestjs/swagger'
+import { AuthService } from '../auth/auth.service'
+import { JwtGuard } from '../guards/jwt/jwt.guard'
+import { JwtPayload } from '../auth/jwtPayload.interface'
+import { UserService } from './user.service'
+import { CreateUserDto } from './dto/createUser.dto'
+import { LoginUserDto } from './dto/loginUser.dto'
+import { infoUserDto } from './dto/infoUser.dto'
 
 @ApiTags('User')
 @Controller('user')
@@ -41,8 +41,8 @@ export class UserController {
   })
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto) {
-    await this.useService.createUser(createUserDto);
-    return true;
+    await this.useService.createUser(createUserDto)
+    return true
   }
 
   @ApiOperation({ summary: '用户登陆' })
@@ -52,18 +52,18 @@ export class UserController {
   })
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    const user = await this.useService.login(loginUserDto);
-    if (!user) {
-      throw new UnauthorizedException('用户名或密码错误');
-    }
+    const user = await this.useService.login(loginUserDto)
+    if (!user)
+      throw new UnauthorizedException('用户名或密码错误')
+
     const access_token = await this.authService.createToken(
       user.username,
       user.id,
-    );
-    await this.cacheManager.set(`user:${user.id}`, access_token);
+    )
+    await this.cacheManager.set(`user:${user.id}`, access_token)
     return {
       accessToken: access_token,
-    };
+    }
   }
 
   @ApiBearerAuth()
@@ -75,9 +75,9 @@ export class UserController {
   @Post('/logout')
   async logout(@Request() req) {
     // 从req上获取用户信息
-    const user = req.user as JwtPayload;
-    await this.cacheManager.del(`user:${user.id}`);
-    return true;
+    const user = req.user as JwtPayload
+    await this.cacheManager.del(`user:${user.id}`)
+    return true
   }
 
   @ApiBearerAuth()
@@ -89,9 +89,9 @@ export class UserController {
   @Get('/info')
   async info(@Request() req): Promise<infoUserDto> {
     // 从req上获取用户信息
-    const user = req.user as JwtPayload;
+    const user = req.user as JwtPayload
     return {
       username: user.username,
-    };
+    }
   }
 }

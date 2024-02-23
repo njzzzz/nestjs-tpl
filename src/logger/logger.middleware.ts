@@ -1,8 +1,8 @@
-import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { getReqMainInfo } from 'src/utils';
-import { Logger } from 'winston';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common'
+import { NextFunction, Request, Response } from 'express'
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
+import { getReqMainInfo } from 'src/utils'
+import { Logger } from 'winston'
 
 @Injectable()
 export default class LoggerMiddleware implements NestMiddleware {
@@ -15,8 +15,8 @@ export default class LoggerMiddleware implements NestMiddleware {
     // 记录日志
     this.logger.info('route', {
       req: getReqMainInfo(req),
-    });
+    })
 
-    next();
+    next()
   }
 }

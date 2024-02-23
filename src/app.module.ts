@@ -1,24 +1,25 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { redisStore } from 'cache-manager-redis-store';
-import { CacheModule, CacheStore } from '@nestjs/cache-manager';
-import { ConfigModule } from '@nestjs/config';
-import { TransformInterceptor } from './response/response.interceptor';
-import { WinstonModule } from 'nest-winston';
-import { transports, format } from 'winston';
-import 'winston-daily-rotate-file';
-import CommonExceptionFilter from './exception/commonException.filter';
-import LoggerMiddleware from './logger/logger.middleware';
-import { MulterModule } from '@nestjs/platform-express';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { FileModule } from './file/file.module';
-import { join } from 'path';
+import { join } from 'node:path'
+import * as process from 'node:process'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
+import { redisStore } from 'cache-manager-redis-store'
+import { CacheModule, CacheStore } from '@nestjs/cache-manager'
+import { ConfigModule } from '@nestjs/config'
+import { WinstonModule } from 'nest-winston'
+import { format, transports } from 'winston'
+import { MulterModule } from '@nestjs/platform-express'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { AuthModule } from './auth/auth.module'
+import { UserModule } from './user/user.module'
+import { PrismaModule } from './prisma/prisma.module'
+import { TransformInterceptor } from './response/response.interceptor'
+import 'winston-daily-rotate-file'
+import CommonExceptionFilter from './exception/commonException.filter'
+import LoggerMiddleware from './logger/logger.middleware'
+import { FileModule } from './file/file.module'
 
 @Module({
   imports: [
@@ -58,7 +59,7 @@ import { join } from 'path';
             }),
             format.json(),
             format.printf((info) => {
-              return `${info.timestamp} ${info.level}: ${info.message}`;
+              return `${info.timestamp} ${info.level}: ${info.message}`
             }),
           ),
         }),
@@ -112,6 +113,6 @@ import { join } from 'path';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('*')
   }
 }
