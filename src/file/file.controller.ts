@@ -7,17 +7,20 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
-import { FileInterceptor } from '@nestjs/platform-express'
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import {
   Controller,
   Post,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
 import { JwtGuard } from '../guards/jwt/jwt.guard'
 import { FileService } from './file.service'
+import { UploadFileDto } from './dto/upload-file.dto'
+import { UploadFilesDto } from './dto/upload-files.dto'
 
 @ApiTags('File')
 @Controller('file')
@@ -28,17 +31,8 @@ export class FileController {
   @ApiOperation({ summary: '文件上传' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    type: 'multipart/form-data',
-    required: true,
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
+    description: '文件',
+    type: UploadFileDto,
   })
   @UseGuards(JwtGuard)
   @Post('/upload')
@@ -53,9 +47,37 @@ export class FileController {
       }),
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadFile(@UploadedFile() file: Express.Multer.File): { url: string } {
     return {
-      url: `/public/upload/${file.filename}`,
+      url: `/upload/${file.filename}`,
+    }
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '多文件上传' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: '多个文件',
+    type: UploadFilesDto,
+  })
+  @UseGuards(JwtGuard)
+  @Post('/uploads')
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      storage: diskStorage({
+        destination: './public/upload/',
+        filename: (req, file, callback) => {
+          const ext = extname(file.originalname)
+          callback(null, randomUUID() + ext)
+        },
+      }),
+    }),
+  )
+  uploadFiles(@UploadedFiles() files: Express.Multer.File[]): {
+    url: string[]
+  } {
+    return {
+      url: files.map(file => `/upload/${file.filename}`),
     }
   }
 }

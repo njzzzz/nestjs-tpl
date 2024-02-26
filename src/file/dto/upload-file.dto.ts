@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class CreateFileDto {
+export class UploadFileDto {
   @ApiProperty({
     type: 'file',
     description: '文件',

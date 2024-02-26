@@ -91,7 +91,7 @@ import { FileModule } from './file/file.module'
     // 文件模块
     FileModule,
   ],
-  controllers: [AppController],
+  // controllers: [AppController],
   providers: [
     AppService,
     {
