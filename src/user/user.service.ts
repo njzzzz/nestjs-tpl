@@ -55,6 +55,6 @@ export class UserService {
   // }
 
   async login(data: Prisma.UserCreateInput): Promise<User> {
-    return await this.prisma.user.findFirst({ where: data })
+    return await this.prisma.user.findFirst({ where: { ...data, isActive: true } })
   }
 }
