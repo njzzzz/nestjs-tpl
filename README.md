@@ -29,7 +29,7 @@ pnpm start:prod
 ## Avaliable
 
 * [X] auth jwt
-* [X] prisma
+* [X] prisma 
 * [X] user
 
   * [X] register
@@ -44,3 +44,4 @@ pnpm start:prod
 * [X] file
 
   * [X] upload
+  * [X] multiple upload
