@@ -29,7 +29,7 @@ pnpm start:prod
 ## Avaliable
 
 * [X] auth jwt
-* [X] prisma 
+* [X] prisma mysql
 * [X] user
 
   * [X] register
