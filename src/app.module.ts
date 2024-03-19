@@ -10,7 +10,8 @@ import { WinstonModule } from 'nest-winston'
 import { format, transports } from 'winston'
 import { MulterModule } from '@nestjs/platform-express'
 import { ServeStaticModule } from '@nestjs/serve-static'
-import { AppController } from './app.controller'
+
+// import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './user/user.module'
@@ -20,6 +21,7 @@ import 'winston-daily-rotate-file'
 import CommonExceptionFilter from './exception/commonException.filter'
 import LoggerMiddleware from './logger/logger.middleware'
 import { FileModule } from './file/file.module'
+import { OrderModule } from './order/order.module'
 
 @Module({
   imports: [
@@ -90,6 +92,8 @@ import { FileModule } from './file/file.module'
     PrismaModule,
     // 文件模块
     FileModule,
+    // 订单模块
+    OrderModule,
   ],
   // controllers: [AppController],
   providers: [

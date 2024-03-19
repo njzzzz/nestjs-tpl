@@ -9,8 +9,34 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  username String  @unique
-  password String
-  isActive Boolean @default(true)
+  id        Int      @id @default(autoincrement())
+  userId    String   @unique @default(uuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+  Order     Order[]
+}
+
+model Order {
+  id          Int       @id @default(autoincrement())
+  name        String
+  phone       String
+  requirement String
+  typeDesc    String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  isComplete  Boolean?  @default(false)
+  type        OrderType @default(CUSTOMER)
+  user        User      @relation(fields: [userId], references: [userId])
+  userId      String
+  orderId     String    @unique @default(uuid())
+}
+
+enum OrderType {
+  CUSTOMER
+  ENTERPRISE
+  RESTAURANT
+  OTHER
 }

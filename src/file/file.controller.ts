@@ -5,6 +5,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express'
@@ -21,9 +22,11 @@ import { JwtGuard } from '../guards/jwt/jwt.guard'
 import { FileService } from './file.service'
 import { UploadFileDto } from './dto/upload-file.dto'
 import { UploadFilesDto } from './dto/upload-files.dto'
+import { updateFileResDto } from './dto/upload-file-res-dto'
 
 @ApiTags('File')
 @Controller('file')
+@UseGuards(JwtGuard)
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
@@ -34,7 +37,10 @@ export class FileController {
     description: '文件',
     type: UploadFileDto,
   })
-  @UseGuards(JwtGuard)
+  @ApiResponse({
+    type: updateFileResDto,
+    status: 200,
+  })
   @Post('/upload')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -60,7 +66,10 @@ export class FileController {
     description: '多个文件',
     type: UploadFilesDto,
   })
-  @UseGuards(JwtGuard)
+  @ApiResponse({
+    type: Object,
+    status: 200,
+  })
   @Post('/uploads')
   @UseInterceptors(
     FilesInterceptor('files', 10, {
@@ -73,11 +82,10 @@ export class FileController {
       }),
     }),
   )
-  uploadFiles(@UploadedFiles() files: Express.Multer.File[]): {
-    url: string[]
-  } {
-    return {
-      url: files.map(file => `/upload/${file.filename}`),
-    }
+  uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
+    return files.reduce((acc, file) => {
+      acc[decodeURIComponent(escape(file.originalname))] = `/upload/${file.filename}`
+      return acc
+    }, {})
   }
 }

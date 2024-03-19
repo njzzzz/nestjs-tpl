@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma, User } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
@@ -31,7 +31,7 @@ export class UserService {
   //   });
   // }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  async createUser(data: Prisma.UserCreateInput) {
     return await this.prisma.user.create({
       data,
     })
@@ -54,7 +54,7 @@ export class UserService {
   //   });
   // }
 
-  async login(data: Prisma.UserCreateInput): Promise<User> {
+  async login(data: Prisma.UserWhereInput) {
     return await this.prisma.user.findFirst({ where: { ...data, isActive: true } })
   }
 }

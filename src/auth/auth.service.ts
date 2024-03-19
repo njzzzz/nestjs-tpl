@@ -13,16 +13,15 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async createToken(username: string, id: number) {
-    const payload: JwtPayload = { username, id }
+  async createToken(payload: JwtPayload) {
     return this.jwtService.sign(payload)
   }
 
   async validateUserByJwt(payload: JwtPayload) {
-    const hasUser = await this.cacheManager.get(`user:${payload.id}`)
+    const hasUser = await this.cacheManager.get(`user:${payload.id}:${payload.userId}`)
     // 根据 payload 中的信息验证用户
     // 例如，从数据库中检索用户信息并返回
     // 请根据你的实际需求进行实现
-    return hasUser ? payload : false
+    return hasUser || false
   }
 }

@@ -24,6 +24,7 @@ import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUser.dto'
 import { LoginUserDto } from './dto/loginUser.dto'
 import { infoUserDto } from './dto/infoUser.dto'
+import { loginUserResDto } from './dto/loginUserResponse.dto'
 
 @ApiTags('User')
 @Controller('user')
@@ -39,6 +40,11 @@ export class UserController {
     description: '用户注册',
     type: CreateUserDto,
   })
+  @ApiResponse({
+    type: Boolean,
+    description: '是否注册成功',
+    status: 200,
+  })
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto) {
     await this.useService.createUser(createUserDto)
@@ -50,17 +56,16 @@ export class UserController {
     description: '用户登陆',
     type: LoginUserDto,
   })
+  @ApiResponse({
+    type: loginUserResDto,
+  })
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
     const user = await this.useService.login(loginUserDto)
     if (!user)
       throw new UnauthorizedException('用户名或密码错误')
-
-    const access_token = await this.authService.createToken(
-      user.username,
-      user.id,
-    )
-    await this.cacheManager.set(`user:${user.id}`, access_token)
+    const access_token = await this.authService.createToken(user)
+    await this.cacheManager.set(`user:${user.id}:${user.userId}`, user)
     return {
       accessToken: access_token,
     }

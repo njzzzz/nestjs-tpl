@@ -22,7 +22,7 @@ export class AppController {
 
   @Get('/get/token')
   getToken() {
-    return this.authService.createToken('admin', 1)
+    return this.authService.createToken({ username: 'xx', id: 1e1, userId: 'example' })
   }
 
   @Post('/user/create')
