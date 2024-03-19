@@ -35,6 +35,7 @@ pnpm start:prod
   * [X] register
   * [X] login
   * [X] logout
+  * [X] info
 * [X] logger
 * [X] swagger
 * [X] validator
@@ -45,3 +46,7 @@ pnpm start:prod
 
   * [X] upload
   * [X] multiple upload
+* [X] order
+
+  * [X] pagination
+  * [X] crud
