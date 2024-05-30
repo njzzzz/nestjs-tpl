@@ -12,6 +12,12 @@ brew install mysql@5.7
 brew install redis
 ```
 
+## Use Docker for develop env
+
+```bash
+docker-compose -f ./docker-compose-dev.yml up -d
+```
+
 ## Starter
 
 ```bash

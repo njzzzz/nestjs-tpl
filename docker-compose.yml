@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # MySQL 服务
@@ -6,7 +6,7 @@ services:
     working_dir: /app
     image: mysql:5.7
     ports:
-      - 3306:3306
+      - 13306:3306
     environment:
       MYSQL_ROOT_PASSWORD: prod_fs_user_pssd_Abc_123_no_use
       MYSQL_DATABASE: prod_fs
@@ -20,7 +20,7 @@ services:
     working_dir: /app
     image: redis:7.2.4
     ports:
-      - 6379:6379
+      - 16379:6379
     volumes:
       - ./redis-data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
