@@ -1,11 +1,14 @@
 // eslint.config.js
-const antfu = require('@antfu/eslint-config').default
+import antfu from '@antfu/eslint-config'
 
-module.exports = antfu({
+export default antfu({
   typescript: {
     overrides: {
       'ts/consistent-type-exports': 'off',
       'ts/consistent-type-imports': 'off',
     },
+  },
+  rules: {
+    'node/prefer-global/process': 'off',
   },
 })

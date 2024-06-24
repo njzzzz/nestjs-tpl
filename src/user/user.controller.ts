@@ -8,8 +8,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Cache } from 'cache-manager'
+import { CACHE_MANAGER, CacheStore } from '@nestjs/cache-manager'
 import {
   ApiBearerAuth,
   ApiBody,
@@ -17,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
+import { getUserRedisKey } from 'src/common/utils'
 import { AuthService } from '../auth/auth.service'
 import { JwtGuard } from '../guards/jwt/jwt.guard'
 import { JwtPayload } from '../auth/jwtPayload.interface'
@@ -30,7 +30,7 @@ import { loginUserResDto } from './dto/loginUserResponse.dto'
 @Controller('user')
 export class UserController {
   constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private cacheManager: CacheStore,
     private readonly useService: UserService,
     private readonly authService: AuthService,
   ) {}
@@ -65,7 +65,7 @@ export class UserController {
     if (!user)
       throw new UnauthorizedException('用户名或密码错误')
     const access_token = await this.authService.createToken(user)
-    await this.cacheManager.set(`user:${user.id}:${user.userId}`, user)
+    await this.cacheManager.set(getUserRedisKey(user), user, { ttl: +process.env.TOKEN_TTL })
     return {
       accessToken: access_token,
     }
@@ -81,7 +81,7 @@ export class UserController {
   async logout(@Request() req) {
     // 从req上获取用户信息
     const user = req.user as JwtPayload
-    await this.cacheManager.del(`user:${user.id}`)
+    await this.cacheManager.del(getUserRedisKey(user))
     return true
   }
 

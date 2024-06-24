@@ -1,5 +1,5 @@
 // auth.module.ts
-
+import * as process from 'node:process'
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
@@ -8,11 +8,13 @@ import { JwtStrategy } from './jwtStrategy'
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     JwtModule.register({
       global: true,
-      secret: 'your-secret-key', // 用于签名的密钥，你应该更改为实际使用的密钥
-      signOptions: { expiresIn: '30d' }, // token 过期时间
+      secret: process.env.SECRET, // 用于签名的密钥，你应该更改为实际使用的密钥
+      signOptions: { expiresIn: +process.env.TOKEN_TTL }, // token 过期时间
     }),
   ],
   providers: [AuthService, JwtStrategy],

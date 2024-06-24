@@ -11,7 +11,6 @@ import { format, transports } from 'winston'
 import { MulterModule } from '@nestjs/platform-express'
 import { ServeStaticModule } from '@nestjs/serve-static'
 
-// import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './user/user.module'
@@ -30,7 +29,9 @@ import { OrderModule } from './order/order.module'
       rootPath: join(__dirname, '..', 'public'),
     }),
     // 配置文件
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     // 日志
     WinstonModule.forRoot({
       transports: [

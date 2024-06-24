@@ -2,15 +2,14 @@
 
 import { Inject, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Cache } from 'cache-manager'
+import { CACHE_MANAGER, CacheStore } from '@nestjs/cache-manager'
 import { JwtPayload } from './jwtPayload.interface'
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private cacheManager: CacheStore,
   ) {}
 
   async createToken(payload: JwtPayload) {

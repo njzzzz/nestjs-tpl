@@ -1,5 +1,4 @@
 // jwt-strategy.ts
-
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
@@ -11,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'your-secret-key', // 用于验证签名的密钥，你应该更改为实际使用的密钥
+      secretOrKey: process.env.SECRET, // 用于验证签名的密钥，你应该更改为实际使用的密钥
     })
   }
 

@@ -4,47 +4,47 @@ class PaginationDto {
   @ApiProperty({
     description: '是否是第一页',
   })
-    isFirstPage: boolean
+  isFirstPage: boolean
 
   @ApiProperty({
     description: '是否是最后一页',
   })
   @ApiProperty()
-    isLastPage: boolean
+  isLastPage: boolean
 
   @ApiProperty({
     description: '当前页',
   })
-    currentPage: number
+  currentPage: number
 
   @ApiProperty({
     description: '前一页',
   })
-    previousPage: number
+  previousPage: number
 
   @ApiProperty({
     description: '后一页',
   })
-    nextPage: number
+  nextPage: number
 
   @ApiProperty({
     description: '总页数',
   })
-    pageCount: number
+  pageCount: number
 
   @ApiProperty({
     description: '总数量',
   })
-    totalCount: number
+  totalCount: number
 }
 
 export function createPaginationDto<T>(Item: T) {
   class PaginationResponseDto<T> {
     @ApiProperty({ type: Item, isArray: true })
-    list: T[]
+  list: T[]
 
     @ApiProperty({ type: PaginationDto })
-    pagination: PaginationDto
+  pagination: PaginationDto
   }
   return PaginationResponseDto
 }
